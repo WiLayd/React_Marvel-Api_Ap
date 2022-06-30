@@ -26,7 +26,6 @@ class RandomChar extends Component {
             minId = 1011000
 
         const id = Math.floor(Math.random() * (maxId - minId) + minId)
-
         this.marvelServices
             .getCharters(id)
             .then(this.onCharLoaded)

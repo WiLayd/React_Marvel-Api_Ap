@@ -23,6 +23,9 @@ class MarvelServices {
     }
 
     _transformCharacter = (char) => {
+        if (char.description === "") {
+            char.description = 'Unfortunately there is no information about this character'
+        }
         return {
             name: char.name,
             description: char.description,

@@ -38,8 +38,11 @@ class CharList extends Component {
             if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
                 imgStyle = { 'objectFit': 'fill' }
             }
+
             return (
-                <li className="char__item" >
+                <li key={item.id}
+                    className="char__item"
+                    onClick={() => this.props.onCharSelected(item.id)}>
                     <img src={item.thumbnail} alt="abyss" style={imgStyle} />
                     <div className="char__name">{item.name}</div>
                 </li>
@@ -49,7 +52,7 @@ class CharList extends Component {
 
     changeStyle = () => {
         let gridStyle = { 'gridTemplateColumns': 'repeat(3, auto' }
-        if (this.state.loading) {
+        if (this.state.loading || this.state.error) {
             gridStyle = { 'gridTemplateColumns': 'repeat(1, auto)' }
         }
         return gridStyle

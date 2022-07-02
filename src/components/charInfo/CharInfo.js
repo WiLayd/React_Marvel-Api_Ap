@@ -6,7 +6,7 @@ import Skeleton from "../skeleton/Skeleton"
 
 import MarvelServices from '../../services/MarvelServices';
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
+
 
 class CharInfo extends Component {
 
@@ -33,6 +33,7 @@ class CharInfo extends Component {
         if (!charId) {
             return;
         }
+
 
         this.onCharLoading()
 
@@ -67,6 +68,7 @@ class CharInfo extends Component {
 
 
     render() {
+
 
         const { char, error, loading } = this.state
 

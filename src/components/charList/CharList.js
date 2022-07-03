@@ -10,7 +10,10 @@ class CharList extends Component {
     state = {
         charters: [],
         error: false,
-        loading: true
+        loading: true,
+        newItemLoading: false,
+        offset: 210,
+        charEnded: false
     }
 
     marvelServices = new MarvelServices();
@@ -19,21 +22,51 @@ class CharList extends Component {
         this.updateChartres();
     }
 
-    onCharLoaded = (charters) => {
+    onReguest = (offset) => {
+        this.onCharListLoading();
+        this.marvelServices.getAllCharters(offset)
+            .then(this.onCharLoaded)
+            .catch(this.onError)
+
+    }
+
+    onCharListLoading = () => {
         this.setState({
-            charters: charters,
+            newItemLoading: true
+        })
+    }
+
+    onCharLoaded = (newCharters) => {
+        let ended = false;
+        if (newCharters < 9) { ended = true }
+
+
+        this.setState(({ offset, charters }) => ({
+            charters: [...charters, ...newCharters],
             loading: false,
-            error: false
+            error: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended
+        }))
+    }
+
+    onError = () => {
+        this.setState({
+            error: true,
+            loading: false
         })
     }
 
     updateChartres = () => {
         this.marvelServices.getAllCharters()
             .then(this.onCharLoaded)
+            .catch(this.onError)
     }
 
     CharItem = () => {
         return this.state.charters.map(item => {
+
             let imgStyle = { 'objectFit': 'cover' }
             if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
                 imgStyle = { 'objectFit': 'fill' }
@@ -62,7 +95,7 @@ class CharList extends Component {
     render() {
 
 
-        const { loading, error } = this.state
+        const { loading, error, offset, newItemLoading, charEnded } = this.state
         const errorMessage = error ? <ErrorMessage /> : null;
         const spinner = loading ? <Spinner /> : null;
         const content = !(loading || error) ? this.CharItem() : null
@@ -74,7 +107,11 @@ class CharList extends Component {
                     {errorMessage}
                     {content}
                 </ul>
-                <button className="button button__main button__long">
+                <button
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    style={{ 'display': charEnded ? 'none' : 'block' }}
+                    onClick={() => this.onReguest(offset)}>
                     <div className="inner">load more</div>
                 </button>
             </div>

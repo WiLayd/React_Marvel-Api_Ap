@@ -14,10 +14,11 @@ class App extends Component {
         selectedChar: null
     }
 
-    onCharSelected = (id) => {
+    onCharSelected = (id, ref) => {
         this.setState({
             selectedChar: id
         })
+        console.log(ref.current)
     }
 
 

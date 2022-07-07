@@ -3,9 +3,11 @@ import './charList.scss';
 import MarvelServices from '../../services/MarvelServices';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import { createRef } from 'react';
 
 
 class CharList extends Component {
+
 
     state = {
         charters: [],
@@ -21,6 +23,8 @@ class CharList extends Component {
     componentDidMount() {
         this.updateChartres();
     }
+
+
 
     onReguest = (offset) => {
         this.onCharListLoading();
@@ -66,6 +70,7 @@ class CharList extends Component {
 
     CharItem = () => {
         return this.state.charters.map(item => {
+
 
             let imgStyle = { 'objectFit': 'cover' }
             if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {

@@ -1,29 +1,24 @@
-class MarvelServices {
 
-    _apiBase = 'https://gateway.marvel.com:443/v1/public/'
-    _apiKey = 'apikey=a81a3f37bc9a95bd097084dc0d7898b6'
-    _baseOffset = 210;
+import { useHttp } from '../hooks/http.hooks'
 
-    getResource = async (url) => {
-        let res = await fetch(url);
+const useMarvelServices = () => {
 
-        if (!res.ok) {
-            throw new Error(`We can't take info from this url, status: ${res.status}`)
-        }
+    const { loading, request, error, clearError } = useHttp();
 
-        return res.json()
+    const _apiBase = 'https://gateway.marvel.com:443/v1/public/'
+    const _apiKey = 'apikey=a81a3f37bc9a95bd097084dc0d7898b6'
+    const _baseOffset = 210;
+
+    const getAllCharters = async (offset = _baseOffset) => {
+        const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`)
+        return res.data.results.map(_transformCharacter)
+    }
+    const getCharters = async (id) => {
+        const res = await request(`${_apiBase}characters/${id}?${_apiKey}`)
+        return _transformCharacter(res.data.results[0]);
     }
 
-    getAllCharters = async (offset = this._baseOffset) => {
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`)
-        return res.data.results.map(this._transformCharacter)
-    }
-    getCharters = async (id) => {
-        const res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`)
-        return this._transformCharacter(res.data.results[0]);
-    }
-
-    _transformCharacter = (char) => {
+    const _transformCharacter = (char) => {
         if (char.description === "") {
             char.description = 'Unfortunately there is no information about this character'
         }
@@ -37,8 +32,10 @@ class MarvelServices {
             comics: char.comics.items
         }
     }
+
+    return { error, loading, getAllCharters, getCharters, clearError }
 }
 
 
 
-export default MarvelServices;
+export default useMarvelServices;

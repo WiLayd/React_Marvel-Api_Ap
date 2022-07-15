@@ -9,6 +9,14 @@ const useMarvelServices = () => {
     const _apiKey = 'apikey=a81a3f37bc9a95bd097084dc0d7898b6'
     const _baseOffset = 210;
 
+    const _comicsOffset = 210;
+
+    const getAllComics = async (offset = _comicsOffset) => {
+        const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`)
+        return res.data.results.map(_transformComics)
+    }
+
+
     const getAllCharters = async (offset = _baseOffset) => {
         const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`)
         return res.data.results.map(_transformCharacter)
@@ -33,7 +41,17 @@ const useMarvelServices = () => {
         }
     }
 
-    return { error, loading, getAllCharters, getCharters, clearError }
+    const _transformComics = (comics) => {
+        return {
+            title: comics.title,
+            price: comics.prices[0].price,
+            thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+            id: comics.id,
+            url: comics.urls[0].url
+        }
+    }
+
+    return { error, loading, getAllCharters, getCharters, clearError, getAllComics }
 }
 
 

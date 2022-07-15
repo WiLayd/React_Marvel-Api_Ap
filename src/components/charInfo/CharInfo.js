@@ -66,9 +66,7 @@ const View = ({ char }) => {
 
     if (comics.length > 0) {
         characterList = comics.map((item, i) => {
-            if (i > 9) {
-                return;
-            }
+            if (i > 9) { return }
             return (
                 <li key={i} className="char__comics-item">
                     {item.name}

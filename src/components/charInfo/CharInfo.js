@@ -22,10 +22,6 @@ const CharInfo = (props) => {
     }, [props.charId])
 
 
-    useEffect(() => {
-        updateChar()
-    }, [])
-
 
     const updateChar = () => {
         const { charId } = props

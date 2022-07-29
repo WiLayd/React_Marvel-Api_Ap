@@ -1,5 +1,6 @@
 import './comicsList.scss';
 
+import { Link } from 'react-router-dom';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ const ComicsList = () => {
     const [offset, setOffset] = useState(210)
     const [newComicsItem, setComicsItem] = useState(false)
     const [comicsEnded, setCharEnded] = useState(false);
+
 
     useEffect(() => {
         onRequest();
@@ -39,11 +41,11 @@ const ComicsList = () => {
         const items = arr.map((item, i) => {
             return (
                 <li key={i} className="comics__item">
-                    <a target="_blank" href={item.url}>
+                    <Link to={`/comics/${item.id}`}>
                         <img src={item.thumbnail} alt={item.title} className="comics__item-img" />
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{`${item.price}$`}</div>
-                    </a>
+                    </Link>
                 </li >
             )
         })
